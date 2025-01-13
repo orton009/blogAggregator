@@ -61,3 +61,28 @@ func handlerRegister(s *state, cmd command) error {
 
 	return nil
 }
+
+func handlerReset(s *state, c command) error {
+	err := s.db.DeleteAll(context.Background())
+	if err != nil {
+		fmt.Errorf("error deleteing entries in database\n %w ", err)
+	}
+	fmt.Println("all users removed successfully!")
+	return nil
+}
+
+func handlerList(s *state, c command) error {
+	users, err := s.db.ListUsers(context.Background())
+	if err != nil {
+		return fmt.Errorf("error listing users %w", err)
+	}
+	currentUser := s.config.CurrentUserName
+	for _, u := range users {
+		if u.Name == currentUser {
+			fmt.Println(u.Name + " (current)")
+		} else {
+			fmt.Println(u.Name)
+		}
+	}
+	return nil
+}

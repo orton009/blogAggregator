@@ -5,8 +5,14 @@ VALUES (
     $2,
     $3,
     $4
-) 
+)
 RETURNING *;
 
 -- name: GetUser :one
 SELECT * from users where name = $1;
+
+-- name: DeleteAll :exec
+TRUNCATE users;
+
+-- name: ListUsers :many
+SELECT * from users;
